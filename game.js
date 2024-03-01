@@ -45,7 +45,7 @@ function jump() {
 
 // Listening for the spacebar press to initiate the jump
 document.addEventListener('keydown', function(event) {
-    if (event.code === 'Space' || event.keyCode === 32) {
+    if (event.code === 'ArrowUp' || event.keyCode === 38) {
         jump();
     }
 });
