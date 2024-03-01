@@ -36,16 +36,16 @@ function updateDino() {
 
 // Make the dinosaur jump
 function jump() {
-    if (dino.onGround) { // Only jump if on the ground
-        dino.velocityY = dino.jumpPower; // Apply jump power
-        dino.onGround = false; // The dino is no longer on the ground
+    if (dino.onGround) { // Only allow jumping if the dino is on the ground
+        dino.velocityY = dino.jumpPower;
+        dino.onGround = false; // Dino is jumping, so it's not on the ground
     }
 }
 
-// Listen for keydown events for jumping
+// Listening for the spacebar press to initiate the jump
 document.addEventListener('keydown', function(event) {
-    if (event.code === 'Space') { // If the spacebar is pressed
-        jump(); // Make the dino jump
+    if (event.code === 'Space' || event.keyCode === 32) { // Check both `code` and `keyCode`
+        jump();
     }
 });
 
