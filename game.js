@@ -9,7 +9,7 @@ let dino = {
     width: 20, // Width of the dino
     height: 20, // Height of the dino
     velocityY: 0, // Vertical velocity
-    jumpPower: -20, // Power of the jump (negative to move up)
+    jumpPower: 20, // Power of the jump (negative to move up)
     gravity: 0.25, // Gravity applied to the dino
     onGround: true, // Is the dino on the ground?
 };
