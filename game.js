@@ -22,16 +22,17 @@ function drawDino() {
 
 // Update the dinosaur's position and apply gravity
 function updateDino() {
-    if (dino.y < canvas.height - dino.height) { // Check if the dino is in the air
-        dino.velocityY += dino.gravity; // Apply gravity
-        dino.onGround = false; // The dino is not on the ground
-    } else {
+    dino.velocityY += dino.gravity; // Apply gravity
+    dino.y += dino.velocityY; // Update the position based on velocity
+
+    // Check if the dino is on the ground
+    if (dino.y >= canvas.height - dino.height) { // Allow dino to be considered on the ground even if slightly overshooting
+        dino.y = canvas.height - dino.height; // Correct the position to make sure it's on the ground
         dino.velocityY = 0; // Stop moving when on the ground
         dino.onGround = true; // The dino is on the ground
-        dino.y = canvas.height - dino.height; // Correct the position to make sure it's on the ground
+    } else {
+        dino.onGround = false; // The dino is not on the ground
     }
-
-    dino.y += dino.velocityY; // Update the position based on velocity
 }
 
 // Make the dinosaur jump
