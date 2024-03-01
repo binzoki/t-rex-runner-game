@@ -1,41 +1,43 @@
-// Get the canvas element and its drawing context
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-// Define the dinosaur (dino) object with properties for position, size, velocity, jump power, gravity, and a flag to check if it's on the ground
 let dino = {
-    x: 50, // X position
-    y: 150, // Y position (start higher to see the jump effect)
-    width: 20, // Width of the dino
-    height: 20, // Height of the dino
-    velocityY: 0, // Vertical velocity
-    jumpPower: -150, // Power of the jump (negative to move up)
-    gravity: 0.25, // Gravity applied to the dino
-    onGround: true, // Is the dino on the ground?
+    x: 50,
+    y: 150,
+    width: 20,
+    height: 20,
+    velocityY: 0,
+    jumpPower: -4.5,
+    gravity: 0.25,
+    onGround: true,
 };
 
-// Draw the dinosaur on the canvas
+// Correctly combining the ground object definitions
+let ground = {
+    x: 0,
+    y: canvas.height - 20, // Position the ground near the bottom of the canvas
+    speed: 2, // Speed at which the ground moves
+    height: 2, // Height of the ground line
+};
+
 function drawDino() {
-    ctx.fillStyle = 'black'; // Set the color of the dino
-    ctx.fillRect(dino.x, dino.y, dino.width, dino.height); // Draw the dino as a rectangle
+    ctx.fillStyle = 'black';
+    ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
 }
 
-// Update the dinosaur's position and apply gravity
 function updateDino() {
-    dino.velocityY += dino.gravity; // Apply gravity
-    dino.y += dino.velocityY; // Update the position based on velocity
+    dino.velocityY += dino.gravity;
+    dino.y += dino.velocityY;
 
-    // Check if the dino is on the ground
-    if (dino.y >= canvas.height - dino.height) { // Allow dino to be considered on the ground even if slightly overshooting
-        dino.y = canvas.height - dino.height; // Correct the position to make sure it's on the ground
-        dino.velocityY = 0; // Stop moving when on the ground
-        dino.onGround = true; // The dino is on the ground
+    if (dino.y >= canvas.height - dino.height) {
+        dino.y = canvas.height - dino.height;
+        dino.velocityY = 0;
+        dino.onGround = true;
     } else {
-        dino.onGround = false; // The dino is not on the ground
+        dino.onGround = false;
     }
 }
 
-// Make the dinosaur jump
 function jump() {
     if (dino.onGround) {
         dino.velocityY = dino.jumpPower;
@@ -43,21 +45,37 @@ function jump() {
     }
 }
 
-// Listening for the spacebar press to initiate the jump
 document.addEventListener('keydown', function(event) {
     if (event.code === 'ArrowUp' || event.keyCode === 38) {
         jump();
     }
 });
 
+// Function to draw and move the ground for a seamless loop
+function drawAndMoveGround() {
+    ground.x -= ground.speed; // Speed of the ground movement
+    if (ground.x <= -canvas.width) ground.x = 0;
+
+    // Correcting the loop effect by drawing two sets of lines
+    for (let i = ground.x; i < canvas.width; i += 20) {
+        ctx.beginPath();
+        ctx.moveTo(i, ground.y);
+        ctx.lineTo(i + 10, ground.y); // Length of each line segment
+        ctx.strokeStyle = "#000";
+        ctx.lineWidth = ground.height;
+        ctx.stroke();
+    }
+}
+
 // The main game loop
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
     
+    drawAndMoveGround(); // Draw and move the ground
     updateDino(); // Update the dino's position and check for gravity
     drawDino(); // Draw the dino in its new position
     
     requestAnimationFrame(gameLoop); // Continue the loop
 }
 
-gameLoop(); // Start the game loop
+gameLoop();
